@@ -1,0 +1,24 @@
+swarm:
+  bind:
+    address: 0.0.0.0
+  datasources:
+      data-sources:
+        MyDS:
+          driver-name: h2
+          connection-url: jdbc:h2:/Users/douglas/Desktop/douglas
+          user-name: sa
+          password: sa
+  security:
+    security-domains:
+      score:
+        classic-authentication:
+          login-modules:
+            Database:
+              code: Database
+              flag: required
+              module-options:
+                dsJndiName: java:jboss/datasources/MyDS
+                principalsQuery: SELECT password FROM tb_user WHERE cpf=?
+                rolesQuery: select r.name, 'Roles' from TB_ROLE r inner join TB_USER_ROLE ur on ur.ROLES_ID = r.ID inner join TB_USER u on u.ID = ur.USER_ID where u.CPF=?
+                hashAlgorithm: SHA-256
+                hashEncoding: base64
